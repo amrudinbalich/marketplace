@@ -1,0 +1,15 @@
+{
+    "name": "amrudinbalic/marketplace",
+    "autoload": {
+        "psr-4": {
+            "Amrudinbalic\\Marketplace\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Amrudin Balić",
+            "email": "balicamrudin@gmail.com"
+        }
+    ],
+    "require": {}
+}
