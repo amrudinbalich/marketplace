@@ -2,7 +2,8 @@
     "name": "amrudinbalic/marketplace",
     "autoload": {
         "psr-4": {
-            "Amrudinbalic\\Marketplace\\": "src/"
+            "Amrudinbalic\\Marketplace\\": "src/",
+            "App\\": "app/"
         }
     },
     "authors": [
@@ -11,5 +12,8 @@
             "email": "balicamrudin@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "altorouter/altorouter": "^2.0",
+        "php-di/php-di": "^6.4"
+    }
 }
