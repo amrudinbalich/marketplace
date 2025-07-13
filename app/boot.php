@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // max error reporting
 error_reporting(E_ALL);
@@ -7,7 +7,13 @@ ini_set('display_errors', 1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // class aliases
-use DI\Container;
+use DI\ContainerBuilder;
+use Invoker\Invoker;
+use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
+use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\DefaultValueResolver;
+use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\ResolverChain;
 
 // app services->
 require_once __DIR__ . '/services/database.php';
@@ -23,18 +29,34 @@ if ($match && is_array($match['target'])) {
     // target details
     [$class, $method] = $match['target'];
 
-    // resolve controller
+    // build container
+    $containerBuilder = new ContainerBuilder();
+    $containerBuilder->addDefinitions(require __DIR__ . '/../app/config/di.php');
+    $containerBuilder->useAutowiring(true);
+
     try {
-        $container = new Container();
+        $container = $containerBuilder->build();
+        
+        $parameterResolvers = [
+            new AssociativeArrayResolver(),
+            new TypeHintContainerResolver($container),
+            new NumericArrayResolver(),
+            new DefaultValueResolver(),
+        ];
+        
+        $resolverChain = new ResolverChain($parameterResolvers);
+        $invoker = new Invoker($resolverChain, $container);
+
+        // get results
         $controller = $container->get($class);
+        $invoker->call([$controller, $method], $match['params'] ?? []);
+
     } catch (\Exception $e) {
         http_response_code(500);
         echo $e->getMessage();
         exit;
     }
 
-    // Call the controller method with route params
-    call_user_func_array([$controller, $method], $match['params']);
 } else { // not found --->
 
     // 404 handler

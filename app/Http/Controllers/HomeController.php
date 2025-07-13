@@ -2,20 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use Twig\Environment;
+
 class HomeController
 {
-    public function index()
+    public function __construct(Environment $twig) {}
+
+    public function index(Environment $twig): void
     {
-        echo 'Home Page';
+        echo $twig->render('home.twig', [
+            'title' => 'Welcome!',
+            'name' => 'Amrudin'
+        ]);
     }
 
-    public function about()
+    public function about(Environment $twig)
     {
-        echo "This is the about page";
+        echo $twig->render('about.twig', [
+            'title' => 'About Us'
+        ]);
     }
 
-    public function user(int $id)
+    public function user(Environment $twig, int $id)
     {
-        echo "User ID is: " . $id;
+        echo $twig->render('user.twig', [
+            'title' => 'User',
+            'id' => $id
+        ]);
     }
 }
