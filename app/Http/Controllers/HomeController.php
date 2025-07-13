@@ -8,9 +8,9 @@ class HomeController
 {
     public function __construct(Environment $twig) {}
 
-    public function index(Environment $twig): void
+    public function index(Environment $twig)
     {
-        echo $twig->render('home.twig', [
+        return $twig->render('home.twig', [
             'title' => 'Welcome!',
             'name' => 'Amrudin'
         ]);
@@ -18,14 +18,14 @@ class HomeController
 
     public function about(Environment $twig)
     {
-        echo $twig->render('about.twig', [
+        return $twig->render('about.twig', [
             'title' => 'About Us'
         ]);
     }
 
     public function user(Environment $twig, int $id)
     {
-        echo $twig->render('user.twig', [
+        return $twig->render('user.twig', [
             'title' => 'User',
             'id' => $id
         ]);

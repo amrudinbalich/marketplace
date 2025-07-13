@@ -49,7 +49,11 @@ if ($match && is_array($match['target'])) {
 
         // get results
         $controller = $container->get($class);
-        $invoker->call([$controller, $method], $match['params'] ?? []);
+        $response = $invoker->call([$controller, $method], $match['params'] ?? []);
+
+        // return response
+        echo $response;
+        exit;
 
     } catch (\Exception $e) {
         http_response_code(500);
