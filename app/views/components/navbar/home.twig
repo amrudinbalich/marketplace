@@ -1,0 +1,62 @@
+<header class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+
+        <!-- Logo -->
+        <a href="/marketplace/" class="navbar-brand text-decoration-none text-dark">Marketplace</a>
+
+        <!-- Toggler (for mobile) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav Links -->
+        <nav class="collapse navbar-collapse justify-content-end" id="navbarMain">
+            <ul class="navbar-nav align-items-center">
+
+                <!-- nav::section -->
+                <li class="nav-item">
+                    <a class="nav-link {% if title == 'Home' %}text-dark{% endif %}" href="/marketplace/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if title == 'Market' %}text-dark{% endif %}" href="/marketplace/market">Market</a>
+                </li>
+                <!-- nav::section::end -->
+
+                <!-- splitter -->
+                <li class="nav-item ms-2 d-none d-lg-block">
+                    <span class="nav-link text-muted">|</span>
+                </li>
+
+                {% if session.user %}
+                    <!-- action::section -->
+                    <li class="nav-item ms-2">
+                        <a href="/marketplace/user/profile" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-person"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a href="/marketplace/user/logout" class="btn btn-info btn-sm">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+                    <!-- action::section::end -->
+                {% else %}
+                    <!-- action::section -->
+                    <li class="nav-item">
+                            <a href="/marketplace/user/login" class="nav-link {% if title == 'Login' %}text-dark{% endif %}">
+                            Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/marketplace/user/register" class="nav-link {% if title == 'Register' %}text-dark{% else %} text-primary text-decoration-underline {% endif %}">
+                            Register
+                        </a>
+                    </li>
+                    <!-- action::section::end -->
+                {% endif %}
+
+            </ul>
+        </nav>
+
+    </div>
+</header>

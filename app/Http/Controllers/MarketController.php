@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-class HomeController
+class MarketController
 {
     public function index()
     {
-        return twig('home');
+        return twig('market');
     }
 }

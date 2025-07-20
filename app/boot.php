@@ -7,51 +7,32 @@ ini_set('display_errors', 1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // class aliases
-use DI\ContainerBuilder;
-use Invoker\Invoker;
-use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
-use Invoker\ParameterResolver\AssociativeArrayResolver;
-use Invoker\ParameterResolver\DefaultValueResolver;
-use Invoker\ParameterResolver\NumericArrayResolver;
-use Invoker\ParameterResolver\ResolverChain;
+use Amrudinbalic\Marketplace\Http\Session;
 
 // app services->
-require_once __DIR__ . '/services/database.php';
+require_once __DIR__ . '/services/container.php';
 require_once __DIR__ . '/services/session.php';
-
-require_once __DIR__ . '/routes/web.php'; // <-- essentials - routes
+require_once __DIR__ . '/routes/web.php';
 
 // route handler
 global $router;
 $match = $router->match();
 
-if ($match && is_array($match['target'])) {
+if ($match && is_array($match['target'])) { // controller
     // target details
     [$class, $method] = $match['target'];
 
-    // build container
-    $containerBuilder = new ContainerBuilder();
-    $containerBuilder->addDefinitions(require __DIR__ . '/../app/config/di.php');
-    $containerBuilder->useAutowiring(true);
-
     try {
-        $container = $containerBuilder->build();
-        
-        $parameterResolvers = [
-            new AssociativeArrayResolver(),
-            new TypeHintContainerResolver($container),
-            new NumericArrayResolver(),
-            new DefaultValueResolver(),
-        ];
-        
-        $resolverChain = new ResolverChain($parameterResolvers);
-        $invoker = new Invoker($resolverChain, $container);
+
+        // include dependencies
+        global $container, $invoker;
 
         // get results
         $controller = $container->get($class);
         $response = $invoker->call([$controller, $method], $match['params'] ?? []);
 
-        // return response
+        // return response (terminate steps)
+        Session::unsetFlashMessages();
         echo $response;
         exit;
 
@@ -61,7 +42,15 @@ if ($match && is_array($match['target'])) {
         exit;
     }
 
-} else { // not found --->
+} elseif(is_callable($match['target'])) { // function
+
+    Session::unsetFlashMessages();
+    $response = $match['target']($match['params'] ?? []);
+
+    echo $response;
+    exit;
+
+} else { // not found
 
     // 404 handler
     header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');

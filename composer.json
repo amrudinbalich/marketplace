@@ -4,7 +4,10 @@
         "psr-4": {
             "Amrudinbalic\\Marketplace\\": "src/",
             "App\\": "app/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "authors": [
         {
@@ -16,6 +19,7 @@
         "altorouter/altorouter": "^2.0",
         "php-di/php-di": "^6.4",
         "twig/twig": "^3.11",
-        "php-di/invoker": "^2.3"
+        "php-di/invoker": "^2.3",
+      "ext-pdo": "*"
     }
 }
