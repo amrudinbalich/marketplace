@@ -20,4 +20,8 @@ class Session
             unset($_SESSION['flash']);
         }
     }
+
+    public static function authenticated(): bool {
+        return isset($_SESSION['user']) && !empty($_SESSION['user']);
+    }
 }

@@ -19,9 +19,22 @@ class Request
      *
      * @return string
      */
-    public static function uri(): string
+    public static function path(): string
     {
-        return $_SERVER['REQUEST_URI'] ?? '/';
+        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        
+        // Remove base path if present
+        $basePath = '/marketplace/';
+        if (str_starts_with($uri, $basePath)) {
+            $uri = substr($uri, strlen($basePath));
+        }
+        
+        // Ensure URI starts with /
+        if (empty($uri) || $uri[0] !== '/') {
+            $uri = '/' . $uri;
+        }
+        
+        return $uri;
     }
 
     /**

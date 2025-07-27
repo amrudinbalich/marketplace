@@ -25,3 +25,15 @@ function redirect(string $url = '', array $flash = []): void {
     header("Location: /marketplace/{$url}");
     exit;
 }
+
+function config(string $key) {
+
+    $requested = explode('.', $key);
+    $config = require __DIR__ . '/../app/config/' . $requested[0] . '.php'; // get a config file
+
+    if(count($requested) > 1) {
+        $config = $config[$requested[1]];
+    }
+
+    return $config;
+}
