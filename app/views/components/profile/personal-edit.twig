@@ -1,0 +1,80 @@
+<!-- personal info form -->
+<div class="row d-flex justify-content-between">
+
+        <h5 class="mb-3">Personal</h5>
+
+        <!-- left column::personal information -->
+        <div class="col-md-7">
+
+            <form action="/user/profile" method="post">
+        
+            <!-- name -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" placeholder="Your Name">
+            </div>
+
+            <!-- email -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" name="email" value="{{ user.email }}" placeholder="yourmail@example.com">
+            </div>
+
+            <!-- phone and location on same line -->
+            <div class="row mb-3">
+
+                <!-- location -->
+                {# <div class="col-md-6">
+                    <label for="location" class="form-label">Location</label>
+                    <select class="form-select form-select-sm" id="location" name="location" style="height: 38px;">
+                        <option value="0">Location</option>
+                        <option value="1">Location 1</option>
+                        <option value="2">Location 2</option>
+                        <option value="3">Location 3</option>
+                        {% for location in locations %}
+                            <option value="{{ location.id }}">{{ location.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div> #}
+
+                <!-- phone -->
+                <div class="col-md-6">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ user.phone }}" placeholder="+387 61 123 456">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- right column::preview -->
+        <div class="col-md-5">
+
+            <div class="mb-3">
+                <label for="profile_banner" class="form-label">Profile Banner</label>
+                <input type="file" class="form-control" id="profile_banner" name="profile_banner" accept="jpg,png,jpeg">
+            </div>
+            <!-- profile banner::end -->
+
+            <div class="mb-3">
+                <label for="profile_picture" class="form-label">Profile Picture</label>
+                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="jpg,png,jpeg">
+            </div>
+            <!-- profile pic::end -->
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Tell us more about yourself or your company...">{{ user.description }}</textarea>
+            </div>
+
+        </div>
+
+        <!-- save button -->
+        <div class="d-flex justify-content-end mt-3">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    
+    </form>
+
+</div>

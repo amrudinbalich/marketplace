@@ -1,0 +1,31 @@
+<div class="mb-3">
+    <h5>Password</h5>
+</div>
+
+
+<form action="/user/password" method="post" class="mb-3 w-25">
+    <label for="password" class="form-label">New Password</label>
+
+    <div class="d-flex gap-2 mb-3">
+        <input type="password" class="form-control" id="password" name="password" placeholder="password" minlength="6">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+<hr />
+
+<div class="mb-3">
+    <h5>Ownership</h5>
+</div>
+
+<div class="mb-3">
+    <h6>Deactivate Account</h6>
+    <p>Deactivating account will remove your account from the system, but you can reactivate it later by logging in.</p>
+    <button class="btn btn-warning">Deactivate</button>
+</div>
+
+<div class="mb-3">
+    <h6>Delete Account</h6>
+    <p>Deleting account permanently will remove all your data from the system. Be causious with this actions because we will not be able to recover your data back.</p>
+    <button class="btn btn-danger">Delete</button>
+</div>

@@ -8,6 +8,7 @@ CREATE TABLE `users` (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
+    phone VARCHAR(255) DEFAULT NULL,
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
@@ -25,9 +26,10 @@ CREATE TABLE `users` (
 --     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 -- );
 
+-- belongs to ( user )
 CREATE TABLE `articles` (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNIQUE, -- belongs to ( user )
+    user_id INT UNIQUE,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
