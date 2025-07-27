@@ -86,11 +86,10 @@ class Request
         return $_POST;
     }
 
-
     /**
      * Validate that an incoming value is existing and not an empty one.
      *
-     * @param array $required
+     * @param array $required The keys to validate do they exist.
      * @return array|false
      */
     public function validate(array $required): array|false {
@@ -109,5 +108,4 @@ class Request
 
         return $validated;
     }
-
 }

@@ -6,9 +6,9 @@
 
     <div class="row mx-auto mt-5 col-md-6">
 
-        {% if error %}
+        {% if session.flash.error %}
             <div class="alert alert-danger">
-                {{ error }}
+                {{ session.flash.error }}
             </div>
         {% endif %}
 

@@ -32,8 +32,8 @@ if ($match && is_array($match['target'])) { // controller
         $response = $invoker->call([$controller, $method], $match['params'] ?? []);
 
         // return response (terminate steps)
-        Session::unsetFlashMessages();
         echo $response;
+        Session::unsetFlashMessages();
         exit;
 
     } catch (\Exception $e) {
@@ -44,10 +44,10 @@ if ($match && is_array($match['target'])) { // controller
 
 } elseif(is_callable($match['target'])) { // function
 
-    Session::unsetFlashMessages();
     $response = $match['target']($match['params'] ?? []);
 
     echo $response;
+    Session::unsetFlashMessages();
     exit;
 
 } else { // not found
@@ -55,5 +55,6 @@ if ($match && is_array($match['target'])) { // controller
     // 404 handler
     header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
     echo '404 - Page not found';
+    exit;
 
 }

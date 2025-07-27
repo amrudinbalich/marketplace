@@ -4,6 +4,12 @@ namespace Amrudinbalic\Marketplace\Http;
 
 class Session
 {
+    public static function startIfNotActive(): void {
+        if(!session_id()) {
+            session_start();
+        }
+    }
+
     public static function destroy(): void {
         unset($_SESSION['user']);
         session_destroy();

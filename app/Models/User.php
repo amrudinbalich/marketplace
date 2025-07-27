@@ -3,36 +3,41 @@
 namespace App\Models;
 
 use Amrudinbalic\Marketplace\Database\Model;
-use PDO;
 
 class User extends Model
 {
-    public function get(int $id): array
+    protected string $table = 'users';
+
+    /**
+     * Search for the user row with name and password.
+     * Use name as a search parameter (has UNIQUE constraint) and then upon finding the user -
+     * compare input password with the hashed password in the database.
+     * 
+     * @param string $name
+     * @param string $password
+     * @return bool
+     */
+    public function authenticate(string $name, string $password): bool
     {
-        $sql = 'SELECT * FROM users WHERE id = :id';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $this->where(['name' => $name]);
+
+        if (!$user || !password_verify($password, $user['password'])) {
+            return false;
+        }
+
+        $_SESSION['user'] = $user;
+
+        return true;
     }
 
-    public function create(array $data): void
+    /**
+     * Fetch profile by ID for authenticated user or for a searched specific user.
+     * 
+     * @param int $id
+     * @return array|bool
+     */
+    public function fetchProfile(int $id): array
     {
-        $sql = 'INSERT INTO users (name, email, password) VALUES (:name, :email, :password)';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($data);
-    }
-
-    public function update(int $id, array $data): void
-    {
-        $sql = 'UPDATE users SET name = :name, email = :email, password = :password WHERE id = :id';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($data);
-    }
-
-    public function delete(int $id): void
-    {
-        $sql = 'DELETE FROM users WHERE id = :id';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
+        return $this->where(['id' => $id]);
     }
 }

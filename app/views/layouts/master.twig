@@ -21,6 +21,15 @@
     {% endif %}
     <!-- navbar::end -->
 
+    <!-- Flash messages 
+    - Encapsulate displaying 'success' actions in master layout for all pages. -->
+    {% if session.flash.success %}
+        {% include 'components/toast.twig' with {
+            message: session.flash.success,
+            type: 'dark'
+        } %}
+    {% endif %}
+
     <main class="container flex-grow-1 my-4">
       {% block content %}{% endblock %}
     </main>

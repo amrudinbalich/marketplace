@@ -9,62 +9,64 @@ use App\Models\User;
 
 /**
  * AuthController class.
- * 
- * It handles the user registration/login and general profile management that is active
- * through the user session.
- * 
- * It is supposed to be separated, yet very close to the UserController - not to be confused.
+ * This controller is responsible for more user session-related actions.
+ * As well for registering new user.
  */
 class AuthController {
 
-        // register
-        public function register(): string
-        {
-            return twig('user/register');
-        }
-        public function actionRegister(Request $request)
+        public function __construct(
+            public User $user
+        ) {}
+
+        // insert/search actions
+        public function register(Request $request) 
         {
             [$name, $email, $password] = $request->validate(['name', 'email', 'password']);
-    
+
             try {
-    
-                $user = new User();
-                $user->create([
+                $insertId = $this->user->create([
                     'name' => $name,
                     'email' => $email,
                     'password' => password_hash($password, PASSWORD_BCRYPT)
                 ]);
-    
-                redirect('', ['success' => 'Registration successful! You can now log in.']);
-    
             } catch (\Exception $e) {
-    
-                if($e->getCode() === '23000') {
-                    $message = 'User with this credentials already exists.';
-                } else {
-                    $message = 'An unexpected error occurred.';
+                if($e->getCode() == 23000) {
+                    redirect('user/register', ['error' => 'User like this already exists.']);
                 }
-    
-                redirect('user/register', ['error' => 'Registration failed: ' . $message]);
             }
+
+            $user = $this->user->get($insertId);
+            $_SESSION['user'] = $user;
+
+            redirect('market', [
+                'success' => 'Registration successful! Thanks for using our service.'
+            ]);
         }
-        // register::end
-    
-        // login
-        public function login(): string
+
+        public function login(Request $request)
         {
-            return twig('user/login');
+            [$name, $password] = $request->validate(['name', 'password']);
+
+            $found = $this->user->authenticate($name, $password);
+
+            if (!$found) {
+                redirect('user/login', 
+                    ['error' => 'Invalid credentials.']
+                );
+            }
+            
+            // user is already remembered up to this point
+            // in the model code ...
+
+            redirect('market', [
+                'success' => 'You have been successfully logged in.'
+            ]);
         }
-        public function actionLogin(Request $request)
-        {
-            $email = $request->query('email');
-            $password = $request->query('password');
-        }
-        // login::end
-    
+
+        // profile actions (auth protected)
         public function profile(): string
         {
-    
+            // todo: move this to middleware
             $user = $_SESSION['user'] ?? null;
     
             if(!$user) {
@@ -72,14 +74,38 @@ class AuthController {
                     'error' => 'You must be logged in to view your profile.'
                 ]);
             }
+            // replace::end
+
+            $user = $this->user->fetchProfile($user['id']);
     
             return twig('user/profile', [
                 'user' => $user
             ]);
         }
-    
+
+        public function profileSettings(): string
+        {
+            // todo: move this to middleware
+            $user = $_SESSION['user'] ?? null;
+
+            if(!$user) {
+                return twig('user/login', [
+                    'error' => 'You must be logged in to view your profile.'
+                ]);
+            }
+            // replace::end
+
+            $user = $this->user->fetchProfile($user['id']);
+                        
+            return twig('user/profile-settings', [
+                'user' => $user
+            ]);
+        }
+        
         public function logout(): void {
             Session::destroy();
-            redirect('', ['logged_out' => 'You have been successfully logged out.']);
+            redirect('user/login', [
+                'success' => 'You have been successfully logged out.']);
         }
+
 }
