@@ -1,11 +1,81 @@
 {% extends "layouts/master.twig" %}
-{% set title = 'Market' %}
+{% set title = article.title ?? 'Article' %}
 
 {% block content %}
 
-    <div class="row">
-        <h4>Market</h4>
-        <p>This is the market page of a marketplace website.</p>
+    <div class="row mb-3">
+        <h2>Categories</h2>
+
+        <!-- categories -->
+        <div class="d-flex gap-2">
+            {% for category in categories %}
+                <!-- todo: add active class -->
+                <a href="/marketplace/market?category={{ category.id }}">{{ category.name }}</a>
+            {% endfor %}
+        </div>
+
+        <!-- sub:categories -->
+        {% if categoryId %}
+        <div class="d-flex gap-2">
+            {% for subCategory in subCategories %}
+                <a href="/marketplace/market?subCategory={{ subCategory.id }}">{{ subCategory.name }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
     </div>
+
+    {# <div class="row mb-3">
+        <p>Apply filters to your search.</p>
+
+        <div class="col-md-4">
+            <form id="filter-form" action="/marketplace/market/filter" method="post">
+
+                <!-- categories -->
+                <div>
+                    <label class="form-label" for="category">Category</label>
+                    <br>
+                    <select name="category" id="category">
+                        <option value="">All</option>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- limit -->
+                <div>
+                    <label class="form-label" for="limit">Limit</label>
+                    <br>
+                    <input type="number" name="limit" id="limit" value="50" min="1" max="100">
+                </div>
+
+                <button id="filter-button" type="submit" class="btn btn-primary mt-2">Filter</button>
+
+            </form>
+        </div>
+
+    </div> #}
+
+    <hr />
+
+    <div>
+        <div class="row mb-3">
+            {# <h2>Results</h2> #}
+            <p>Showing <span id="articles-count">{{ articles|length }}</span> results. <a class="ms-1" href="/marketplace/market">Reset</a></p>
+        </div>
+
+        <div id="loading-spinner" class="spinner-border d-none" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+
+        <div class="row" id="articles-container">
+            {% for article in articles %}
+                {% include 'components/article.twig' with { article: article } %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="assets/js/market.js"></script>
 
 {% endblock %}

@@ -86,16 +86,25 @@ abstract class Model implements CrudInterface
      * @param array $columns eg ['id', 'name', 'email']
      * @return array|false
      */
-    public function where(array $conditions, array $columns = ['*']): array|false {
+    public function where(array $conditions, array $columns = ['*'], int $limit = 50): array|false {
         $whereClause = $this->getWhereClause(columns: array_keys($conditions));
         $columns = implode(', ', $columns);
 
-        $sql = "SELECT {$columns} FROM {$this->table} {$whereClause}";
-
+        $sql = "SELECT {$columns} FROM {$this->table} {$whereClause} LIMIT {$limit}";
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute($conditions);
-        return $stmt->fetch();
+        return $stmt->fetchAll();
+    }
+
+    public function fetchAll(array $columns = ['*'], int $limit = 50): array
+    {
+        $columns = implode(', ', $columns);
+        $sql = "SELECT {$columns} FROM {$this->table} LIMIT {$limit}";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     // privates (helpers)

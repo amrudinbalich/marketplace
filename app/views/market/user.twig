@@ -1,0 +1,72 @@
+{% extends "layouts/master.twig" %}
+{% set title = user.name ?? 'User Profile' %}
+
+{% block content %}
+    <div class="mt-4">
+
+        <!-- back button -->
+        {% include "components/buttons/back-to-listings.twig" %}
+       
+        <!-- User Profile Header -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 text-center">
+                                <img src="/marketplace/assets/images/profile_default_old.jpg" 
+                                     alt="{{ user.name }}" 
+                                     class="rounded-circle img-fluid mb-3" 
+                                     style="width: 200px; height: 200px; object-fit: cover;">
+                            </div>
+                            <div class="col-md-9">
+                                <h2 class="card-title">
+                                    {{ user.name }} 
+                                    <!-- verified badge -->
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top">
+                                        <i class="bi bi-patch-check-fill me-1 text-primary fs-3"></i>
+                                    </span>
+                                </h2>
+                                <p class="text-muted">Member since {{ user.created_at|date('F Y') }}</p>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <h6>Contact</h6>
+                                        <p><i class="fas fa-envelope me-2"></i> <a class="text-decoration-none" href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+                                        <p><i class="fas fa-phone me-2"></i> <a class="text-decoration-none" href="tel:{{ user.phone }}">{{ user.phone }}</a></p>
+                                        {% include "components/buttons/send-message.twig" with { user_id: user.id } %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><i class="fas fa-map-marker-alt me-2"></i> {{ user.city ?? 'N/A' }}</p>
+                                        <h6><i class="fas fa-clock me-2"></i>Last Active</h6>
+                                        <p class="text-muted">{{ user.updated_at|date('M d, Y H:i') }}</p> <!-- todo: implement last active -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User's Articles -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="mb-3">Articles by {{ user.name }}</h3>
+                
+                {% if articles and articles|length > 0 %}
+                    <div class="row" id="user-articles">
+                        {% for article in articles %}
+                            {% include 'components/article.twig' with { article: article, show_sold_out: true } %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No articles found</h5>
+                        <p class="text-muted">{{ user.name }} hasn't posted any articles yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
