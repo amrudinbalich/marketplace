@@ -47,56 +47,30 @@ class Request
         return array_merge($_GET, $_POST);
     }
 
-    /**
-     * Get specific query parameters by key(s).
-     *
-     * @param string|array|null $key
-     * @return array|mixed|null
-     */
-    public function query(string|array $key = null): mixed
+    public function get(string|array $key): mixed
     {
-        // multiple keys
+        $source = $_GET ?? $_POST;
+
+        if(!$source) {
+            $source = json_decode(file_get_contents('php://input'), true);
+        }
+
+        // list of keys
         if (is_array($key)) {
             $result = [];
             foreach ($key as $k) {
-                $result[$k] = $_GET[$k] ?? null;
+                $result[$k] = $source[$k] ?? null;
             }
             return $result;
         }
 
         // single key
-        if (is_string($key)) {
-            return $_GET[$key] ?? null;
-        }
-
-        // return all query parameters
-        return $_GET;
+        return $source[$key] ?? null;
     }
 
-    /**
-     * Get a specific request body parameter by key.
-     *
-     * @param string|array|null $key
-     * @return array|mixed|null
-     */
-    public function body(string|array $key = null): mixed
+    public function isset(string $key): bool
     {
-        // multiple keys
-        if (is_array($key)) {
-            $result = [];
-            foreach ($key as $k) {
-                $result[$k] = $_POST[$k] ?? null;
-            }
-            return $result;
-        }
-
-        // single key
-        if (is_string($key)) {
-            return $_POST[$key] ?? null;
-        }
-
-        // return all body parameters
-        return $_POST;
+        return isset($_GET[$key]) || isset($_POST[$key]);
     }
 
     /**

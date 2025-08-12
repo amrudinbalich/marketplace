@@ -29,14 +29,21 @@ CREATE TABLE `users` (
 -- belongs to ( user )
 CREATE TABLE `articles` (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNIQUE,
+    user_id INT UNIQUE, -- belongs to
+
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
-    quantity INT NOT NULL DEFAULT 5,
+    image VARCHAR(255) DEFAULT NULL,
+
+    category_id INT,
+    -- sub_category_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+    -- FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id) ON DELETE CASCADE
 );
 
 -- categories::start
@@ -46,6 +53,13 @@ CREATE TABLE `categories` (
     name VARCHAR(255) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE `sub_categories` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    category_id INT,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
 
 -- relations

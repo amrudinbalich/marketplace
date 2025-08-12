@@ -12,7 +12,7 @@ use Amrudinbalic\Marketplace\Http\Session;
 // app services->
 require_once __DIR__ . '/services/container.php';
 require_once __DIR__ . '/services/session.php';
-require_once __DIR__ . '/services/middlewares.php';
+// require_once __DIR__ . '/services/middlewares.php';
 require_once __DIR__ . '/routes/web.php';
 
 // route handler

@@ -7,6 +7,7 @@
 
 // controllers
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MarketController;
 
 $router = new AltoRouter();
 $router->setBasePath('/marketplace');
@@ -19,7 +20,15 @@ $router->setBasePath('/marketplace');
 
 // views
 $router->map('GET', '/', fn () => twig('home'));
-$router->map('GET', '/market', fn () => twig('market')); // todo: move this to a marketcontroller because it needs complex data for rendering... wont you really fetch all the data when the page loads when you have a luxury to do it on the page load on the server ?
+
+$router->map('GET', '/market', [MarketController::class, 'index']);
+$router->map('POST', '/market/filter', [MarketController::class, 'filter']);
+
+// market
+$router->map('GET', '/market/article/[i:id]', [MarketController::class, 'article']); // article page
+$router->map('GET', '/market/user/[i:id]', [MarketController::class, 'user']); // user profile
+// $router->map('GET', '/market/user/inbox', [MarketController::class, 'inbox']); // user inbox
+$router->map('GET', '/market/messages/[i:id]', [MarketController::class, 'messages']); // send inbox
 
 // auth::start
 // views
